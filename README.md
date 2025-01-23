@@ -1,2 +1,1 @@
-# PS1-CHEME-5820-SP25
-Problem set 1 for CHEME-5820 Spring 2025 Semester at Cornell
+## Problem Set 1 (PS1) CHEME-5820: K-means Clustering Pathological Data Problem
