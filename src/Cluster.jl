@@ -79,3 +79,27 @@ The helper function is responsible for implementing the clustering logic.
 function cluster(data::Array{<:Number,2}, algorithm::T; d = Euclidean(), verbose::Bool = false) where T <: MyAbstractUnsupervisedClusteringAlgorithm
     return _cluster(data, algorithm, d = d, verbose = verbose);
 end
+
+function silhouette(data::Array{<:Number,2}, assignments::Array{Int,1}; d = Euclidean())
+    
+    # initialize -
+    number_of_points = size(data, 1);
+    K = length(unique(assignments));
+    s = zeros(Float64, number_of_points);
+    a = zeros(Float64, number_of_points);
+    b = zeros(Float64, number_of_points);
+    tmp = zeros(Float64, K);
+    
+    # calculate the silhouette -
+    for i ∈ 1:number_of_points
+        for k ∈ 1:K
+            tmp[k] = mean([d(data[i,:], data[j,:]) for j ∈ findall(x-> x == k, assignments)]);
+        end
+        a[i] = tmp[assignments[i]];
+        b[i] = minimum([tmp[k] for k ∈ 1:K if k ≠ assignments[i]]);
+        s[i] = (b[i] - a[i]) / max(a[i], b[i]);
+    end
+    
+    # return -
+    return s;
+end

@@ -9,7 +9,7 @@ function build(modeltype::Type{MyNaiveKMeansClusteringAlgorithm}, data::NamedTup
     maxiter = data.maxiter;
     dimension = data.dimension;
     number_of_points = data.number_of_points;
-    SF = data.scale_factor;
+    dataset = data.dataset;
 
     # setup the initial assignments -
     assignments = zeros(Int64, number_of_points);
@@ -17,10 +17,19 @@ function build(modeltype::Type{MyNaiveKMeansClusteringAlgorithm}, data::NamedTup
         assignments[i] = rand(1:K); # randomly assign points to clusters
     end
 
-    # setup the centriods -
+    # setup the centriods, based upon the random assignments -
     centroids = Dict{Int64, Vector{Float64}}();
     for k ∈ 1:K
-        centroids[k] = SF*rand(Float64, dimension); # randomly generate the centriods
+        
+        centroids[k] = zeros(Float64, dimension); # initialize the centroid
+        index_of_cluster_k = findall(x-> x == k, assignments); # index of the data vectors assigned to cluster k
+        if (isempty(index_of_cluster_k) == true)
+            continue;
+        else
+            for d ∈ 1:dimension
+                centroids[k][d] = mean(dataset[index_of_cluster_k, d]);
+            end
+        end
     end
 
     # set the data on the model -
