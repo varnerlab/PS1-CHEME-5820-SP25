@@ -95,7 +95,7 @@ compared to other clusters (separation). The silhouette score ranges from -1 to 
 ### Returns
 - A 1D array of silhouette scores, one for each data point in the data set.
 """
-function silhouette(data::Array{<:Number,2}, assignments::Array{Int,1}; d = Euclidean())
+function silhouette(data::Array{<:Number,2}, assignments::Array{Int,1}; d = Euclidean())::Array{Float64,2}
     
     # initialize -
     number_of_points = size(data, 1);
@@ -104,6 +104,7 @@ function silhouette(data::Array{<:Number,2}, assignments::Array{Int,1}; d = Eucl
     a = zeros(Float64, number_of_points);
     b = zeros(Float64, number_of_points);
     tmp = zeros(Float64, K);
+    result = Array{Float64,2}(undef, number_of_points, 3);
     
     # calculate the silhouette -
     for i ∈ 1:number_of_points
@@ -114,7 +115,14 @@ function silhouette(data::Array{<:Number,2}, assignments::Array{Int,1}; d = Eucl
         b[i] = minimum([tmp[k] for k ∈ 1:K if k ≠ assignments[i]]);
         s[i] = (b[i] - a[i]) / max(a[i], b[i]);
     end
+
+    # package the results -
+    for i ∈ 1:number_of_points
+        result[i,1] = a[i]; # first column is the a value
+        result[i,2] = b[i]; # second column is the b value
+        result[i,3] = s[i]; # third column is the silhouette score
+    end
     
     # return -
-    return s;
+    return result;
 end
