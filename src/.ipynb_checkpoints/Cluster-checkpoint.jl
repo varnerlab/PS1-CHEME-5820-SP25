@@ -80,21 +80,6 @@ function cluster(data::Array{<:Number,2}, algorithm::T; d = Euclidean(), verbose
     return _cluster(data, algorithm, d = d, verbose = verbose);
 end
 
-
-"""
-    silhouette(data::Array{<:Number,2}, assignments::Array{Int,1}; d = Euclidean())
-
-This function calculates the silhouette score for each data point in the data set. The silhouette score is a measure of how similar an object is to its own cluster (cohesion) 
-compared to other clusters (separation). The silhouette score ranges from -1 to 1, where a high value indicates that the object is well matched to its own cluster and poorly matched to neighboring clusters.
-
-### Arguments
-- `data::Array{<:Number,2}`: A 2D array of data points that we will cluster. Features are along the columns, and data points are along the rows.
-- `assignments::Array{Int,1}`: A 1D array of integers that tells us which cluster each data point belongs to.
-- `d::MyAbstractDistanceMetric = Euclidean()`: The distance metric for the clustering algorithm. This is an optional argument and defaults to the Euclidean distance.
-
-### Returns
-- A 1D array of silhouette scores, one for each data point in the data set.
-"""
 function silhouette(data::Array{<:Number,2}, assignments::Array{Int,1}; d = Euclidean())
     
     # initialize -
