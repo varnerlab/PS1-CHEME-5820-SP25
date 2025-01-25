@@ -25,6 +25,7 @@ using JLD2
 using PrettyTables
 using Clustering
 using Random
+using Test
 
 # load my own packages
 include(joinpath(_PATH_TO_SRC, "Types.jl"));
